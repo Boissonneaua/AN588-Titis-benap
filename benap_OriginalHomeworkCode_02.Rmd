@@ -2,15 +2,23 @@
 title: "benap_OriginalHomeworkCode_02"
 author: "Ben Peters"
 date: "2025-02-06"
-output: html_document
+output: 
+  prettydoc::html_pretty: #this tells Rmd to use prettydoc's html_pretty output instead of just straight html
+    toc: true #this adds a table of contents
+    theme: cayman #this tells it which theme to use
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Favorite Titi Image
 
-Every Saturday morning, at the same time, a primatologist goes and sits in the forest to listen for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number of calls she will hear in that time is exactly 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session.
+![I just like the name]("lucifer_titi.jpg")
+
+## Intro
+
+**Every Saturday morning, at the same time, a primatologist goes and sits in the forest to listen for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number of calls she will hear in that time is exactly 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session.**
 
 ```{r} 
 # let's start by assigning X as a Poisson random distribution of the number of calls heard in a 2 hour monitoring session
@@ -18,7 +26,9 @@ X <- dpois(0:40,15) #this defines X as a poisson distribution with a mean of 15 
 barplot(X, names.arg = 0:40, space = 0, xlab = "calls", ylab = "Pr(X = x)", main = "Call # Probability Mass Function") #this plots the above generated distribution just to check that it looks right
 ```
 
-What is the probability that she will hear more than 8 calls during any given session?
+***
+
+## What is the probability that she will hear more than 8 calls during any given session?
 
 ```{r}
 ppois(8, 15, lower.tail = FALSE) #ppois returns the cumulative distribution function for a given lambda (in our case 15) and value within the distribution (in our case 8 for the number of calls we're trying to determine the probability for), we specify lower.tail = FALSE to ensure we're finding the probability of the upper tail (i.e. greater than our given value of 8)
@@ -28,7 +38,9 @@ barplot(ppois(8:40, lambda = 15, lower.tail = FALSE), ylim = 0:1, names.arg = 8:
     ylab = "Pr(X > x)", main = "Cumulative Call Probability") # we can visualize the cumulative probability distribution by plotting ppois between our lower value (8) and an undetermined max (I use 40 here, it can theoretically go to infinity but our probability is already essentially at 0 well before we hit 30)
 ```
 
-What is the probability that she will hear no calls in a session?
+***
+
+## What is the probability that she will hear no calls in a session?
 
 ```{r}
 ppois(0, 15) # as before we use the ppois function to return the cumulative distribution, though this time we leave lower.tail = TRUE to find the probability X <= x (inclusive). Since we're essentially finding the probability in a range from 0 to 0 it's astronomically low,
@@ -38,36 +50,60 @@ barplot(ppois(0:30, lambda = 15), ylim = 0:1, names.arg = 0:30, xlab = "x",
     ylab = "Pr(X <= x)", main = "Cumulative Call Probability") #same as before we're plotting the probability distribution, though since lower.tail = TRUE this time note that the distribution appears inverted to the previous plot. We're finding the probability X <= x, instead of X > x
 ```
 ```{r}
-#technically I think it'd be better to answer this question like this tho:
+#technically I think it'd be better to answer this question like this though:
 
 dpois(0,15) # since this returns the direct probability of a single value rather than a spread, though note that both answers are the same: 3.059023e-07
 ```
-What is the probability that she will hear exactly 3 calls in a session?
+
+***
+
+## What is the probability that she will hear exactly 3 calls in a session?
 
 ```{r}
 # now we return to using the dpois function
 dpois(3, 15) # return the probability for a single value (3) given a poisson distribution with a mean of 15
 ```
 
-Plot the relevant Poisson mass function over the values in range 0 ≤ x ≤ 30.
+***
+
+## Plot the relevant Poisson mass function over the values in range 0 ≤ x ≤ 30.
+
 ```{r}
 barplot(dpois(0:30, 15), names.arg = 0:30, space = 0, xlab = "# of calls", ylab = "Pr(X = x)", main = "Call # Probability Mass Function") # see above for a discussion of dpois, the plot here is the same, just over the range 0:30
 ```
 
-Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
+***
+
+## Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
 
 ```{r}
-simulated_calls <- rpois(104, 15) #rpois lets us generate a random number based on a poisson distribution, the arguments are n (104), the sample size, and lambda (15), the mean same as above
+simulated_calls <- rpois(104, 15) #rpois lets us generate a random number based on a poisson distribution, the arguments are n (104), the sample size, and lambda (15), the mean - same as above
 simulated_calls
 ```
 
-Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. How does your histogram compare to the shape of the probability mass function you plotted above?
+***
+
+## Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. 
+
+**How does your histogram compare to the shape of the probability mass function you plotted above?**
 
 ```{r}
-hist(simulated_calls, 
-     xlim = c(0,30), 
-     breaks = 15, 
-     xlab = "# of Calls (Simulated)", 
-     main = "Histogram of Simulated Calls")
+hist(simulated_calls, #plot a histogram of the calls we simulated above
+     xlim = c(0,30), # set limits on the x axis
+     breaks = 15, # set the number of breaks in the histogram (I just played around with the number 'til I thought it looked good)
+     xlab = "# of Calls (Simulated)", # relabel the x axis
+     main = "Histogram of Simulated Calls") #give it a title!
 ```
+
+*The histogram is noticeably different from the one we plotted for probability mass function, mostly it appears far more uneven, with local peaks and valleys irregularly distributed across the range of values. Like the probability mass distribution the overall inflection point in frequencies appears to occur around 15 but there are some simulated values with frequencies higher than this that are both lower and higher than our given lambda. It also appears to have more of a tail than the probability mass graph, with some call values approaching 25 still showing relatively high frequencies (granted these are only on the order of 2-4, but still...), contrasting with the tapering seen in the probability density distribution.*
+
+
+
+
+
+
+
+
+
+
 
