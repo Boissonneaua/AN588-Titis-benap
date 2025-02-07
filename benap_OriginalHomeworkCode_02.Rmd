@@ -99,6 +99,13 @@ hist(simulated_calls, #plot a histogram of the calls we simulated above
 
 *The histogram is noticeably different from the one we plotted for probability mass function, mostly it appears far more uneven, with local peaks and valleys irregularly distributed across the range of values. Like the probability mass distribution the overall inflection point in frequencies appears to occur around 15 but there are some simulated values with frequencies higher than this that are both lower and higher than our given lambda. It also appears to have more of a tail than the probability mass graph, with some call values approaching 25 still showing relatively high frequencies (granted these are only on the order of 2-4, but still...), contrasting with the tapering seen in the probability density distribution.*
 
+***
+
+## Issues
+
+*I didn't run into a huge number of issues. I think the biggest hiccups I ran across were just figuring out which pois function did what and when to use them. It was pretty easy to figure out dpois and once I understood the meaning of "cumulative" in its description, ppois was nice and comprehensible too. Helping matters was the fact that each of these functions essentially only took 1 or 2 arguments to generate a usable output. rpois took me a second to figure out but that was mostly clarified in a quick google search as I tried to find a function that generated a random sample from a given probability distribution. I've done this with normal and T distributions before obviously but poisson was a bit of a new one. Once I realized the syntax was basically identical though, everything became a lot clearer.*
+
+*Themes were a different matter, it took me a bit of playing around to figure out the right set of commands to include up top to actually get the cayman theme to work but once again a quick bit of googling was enough to clarify things. Luckily I've had to play around with image additions to both Rmd and HTML documents more broadly, so the syntax there was easy once I remembered how to do all that. I think the biggest annoyance was that image downloads from iNaturalist still push out jpgs instead of pngs, I wish there was an easier way to convert file formats on modern windows than having to open up the thing in gimp and then resave it...*
 
 
 
