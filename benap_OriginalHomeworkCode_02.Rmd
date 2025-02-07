@@ -57,6 +57,17 @@ barplot(dpois(0:30, 15), names.arg = 0:30, space = 0, xlab = "# of calls", ylab 
 Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
 
 ```{r}
+simulated_calls <- rpois(104, 15) #rpois lets us generate a random number based on a poisson distribution, the arguments are n (104), the sample size, and lambda (15), the mean same as above
+simulated_calls
+```
 
+Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. How does your histogram compare to the shape of the probability mass function you plotted above?
+
+```{r}
+hist(simulated_calls, 
+     xlim = c(0,30), 
+     breaks = 15, 
+     xlab = "# of Calls (Simulated)", 
+     main = "Histogram of Simulated Calls")
 ```
 
