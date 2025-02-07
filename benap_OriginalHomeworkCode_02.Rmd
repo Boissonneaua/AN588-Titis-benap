@@ -14,7 +14,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Favorite Titi Image
 
-![I just like the name]("lucifer_titi.jpg")
+![I love diabolically named wildlife. Photo credit to iNaturalist user bone-gang](lucifer_titi.png)
+
+***
 
 ## Intro
 
