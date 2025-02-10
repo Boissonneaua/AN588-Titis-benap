@@ -1,0 +1,128 @@
+---
+title: "benap_OriginalHomeworkCode_02"
+author: "Ben Peters"
+date: "2025-02-06"
+output: 
+  prettydoc::html_pretty: #this tells Rmd to use prettydoc's html_pretty output instead of just straight html
+    toc: true #this adds a table of contents
+    theme: cayman #this tells it which theme to use
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Favorite Titi Image
+
+![I love diabolically named wildlife. Photo credit to iNaturalist user bone-gang](lucifer_titi.png)
+
+***
+
+## Intro
+
+**Every Saturday morning, at the same time, a primatologist goes and sits in the forest to listen for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number of calls she will hear in that time is exactly 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session.**
+
+```{r} 
+# let's start by assigning X as a Poisson random distribution of the number of calls heard in a 2 hour monitoring session
+X <- dpois(0:40,15) #this defines X as a poisson distribution with a mean of 15 over the interval of 0-40 (I just chose the max more or less at random to just try and get a full spread of the distribution)
+barplot(X, names.arg = 0:40, space = 0, xlab = "calls", ylab = "Pr(X = x)", main = "Call # Probability Mass Function") #this plots the above generated distribution just to check that it looks right
+```
+
+***
+
+# TZ: I really appreciate the commenting in each chunk, it really explains the thought process.
+
+## What is the probability that she will hear more than 8 calls during any given session?
+
+```{r}
+ppois(8, 15, lower.tail = FALSE) #ppois returns the cumulative distribution function for a given lambda (in our case 15) and value within the distribution (in our case 8 for the number of calls we're trying to determine the probability for), we specify lower.tail = FALSE to ensure we're finding the probability of the upper tail (i.e. greater than our given value of 8)
+```
+```{r}
+barplot(ppois(8:40, lambda = 15, lower.tail = FALSE), ylim = 0:1, names.arg = 8:40, xlab = "x",
+    ylab = "Pr(X > x)", main = "Cumulative Call Probability") # we can visualize the cumulative probability distribution by plotting ppois between our lower value (8) and an undetermined max (I use 40 here, it can theoretically go to infinity but our probability is already essentially at 0 well before we hit 30)
+```
+
+***
+
+# TZ: This really helped me understand why you ppois instead of dpois since we were trying to find the CDF rather than PMF.
+
+## What is the probability that she will hear no calls in a session?
+
+```{r}
+ppois(0, 15) # as before we use the ppois function to return the cumulative distribution, though this time we leave lower.tail = TRUE to find the probability X <= x (inclusive). Since we're essentially finding the probability in a range from 0 to 0 it's astronomically low,
+```
+```{r}
+barplot(ppois(0:30, lambda = 15), ylim = 0:1, names.arg = 0:30, xlab = "x",
+    ylab = "Pr(X <= x)", main = "Cumulative Call Probability") #same as before we're plotting the probability distribution, though since lower.tail = TRUE this time note that the distribution appears inverted to the previous plot. We're finding the probability X <= x, instead of X > x
+```
+```{r}
+#technically I think it'd be better to answer this question like this though:
+
+dpois(0,15) # since this returns the direct probability of a single value rather than a spread, though note that both answers are the same: 3.059023e-07
+```
+
+***
+
+# TZ: Great understanding of ppois and dpois and the use of it to display the same answer. 
+
+## What is the probability that she will hear exactly 3 calls in a session?
+
+```{r}
+# now we return to using the dpois function
+dpois(3, 15) # return the probability for a single value (3) given a poisson distribution with a mean of 15
+```
+
+***
+
+# TZ: I agree with the use of dpois as gives the Probability Mass Function which gives the exact probability at an exact value.
+
+## Plot the relevant Poisson mass function over the values in range 0 ≤ x ≤ 30.
+
+```{r}
+barplot(dpois(0:30, 15), names.arg = 0:30, space = 0, xlab = "# of calls", ylab = "Pr(X = x)", main = "Call # Probability Mass Function") # see above for a discussion of dpois, the plot here is the same, just over the range 0:30
+```
+
+***
+
+## Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
+
+```{r}
+simulated_calls <- rpois(104, 15) #rpois lets us generate a random number based on a poisson distribution, the arguments are n (104), the sample size, and lambda (15), the mean - same as above
+simulated_calls
+```
+
+***
+
+# TZ: You can potentially set a seed to generate the same "random" sample every time you run the cell. 
+
+## Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. 
+
+**How does your histogram compare to the shape of the probability mass function you plotted above?**
+
+```{r}
+hist(simulated_calls, #plot a histogram of the calls we simulated above
+     xlim = c(0,30), # set limits on the x axis
+     breaks = 15, # set the number of breaks in the histogram (I just played around with the number 'til I thought it looked good)
+     xlab = "# of Calls (Simulated)", # relabel the x axis
+     main = "Histogram of Simulated Calls") #give it a title!
+```
+
+*The histogram is noticeably different from the one we plotted for probability mass function, mostly it appears far more uneven, with local peaks and valleys irregularly distributed across the range of values. Like the probability mass distribution the overall inflection point in frequencies appears to occur around 15 but there are some simulated values with frequencies higher than this that are both lower and higher than our given lambda. It also appears to have more of a tail than the probability mass graph, with some call values approaching 25 still showing relatively high frequencies (granted these are only on the order of 2-4, but still...), contrasting with the tapering seen in the probability density distribution.*
+
+***
+
+## Issues
+
+*I didn't run into a huge number of issues. I think the biggest hiccups I ran across were just figuring out which pois function did what and when to use them. It was pretty easy to figure out dpois and once I understood the meaning of "cumulative" in its description, ppois was nice and comprehensible too. Helping matters was the fact that each of these functions essentially only took 1 or 2 arguments to generate a usable output. rpois took me a second to figure out but that was mostly clarified in a quick google search as I tried to find a function that generated a random sample from a given probability distribution. I've done this with normal and T distributions before obviously but poisson was a bit of a new one. Once I realized the syntax was basically identical though, everything became a lot clearer.*
+
+*Themes were a different matter, it took me a bit of playing around to figure out the right set of commands to include up top to actually get the cayman theme to work but once again a quick bit of googling was enough to clarify things. Luckily I've had to play around with image additions to both Rmd and HTML documents more broadly, so the syntax there was easy once I remembered how to do all that. I think the biggest annoyance was that image downloads from iNaturalist still push out jpgs instead of pngs, I wish there was an easier way to convert file formats on modern windows than having to open up the thing in gimp and then resave it...*
+
+# TZ: Great job on the homework as it really helped me understand the use of ppois and dpois as well. Your comments were useful in understanding what you did in your code.
+
+
+
+
+
+
+
+
