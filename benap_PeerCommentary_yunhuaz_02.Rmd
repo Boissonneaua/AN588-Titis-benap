@@ -119,6 +119,8 @@ hist(simulated_calls, #plot a histogram of the calls we simulated above
 
 # TZ: Great job on the homework as it really helped me understand the use of ppois and dpois as well. Your comments were useful in understanding what you did in your code.
 
+> BP: Glad everything was useful and helpful! Thanks for the suggestion on setting a seed, that's something I'll integrate into the final code!
+
 
 
 
